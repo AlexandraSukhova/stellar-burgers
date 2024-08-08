@@ -77,7 +77,7 @@ export const DefaultOrderCard: Story = {
       background: {
         hash: '',
         key: 'eitkep27',
-        pathname: '/',
+        pathname: '/feed',
         search: '',
         state: null
       }

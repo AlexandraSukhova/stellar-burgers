@@ -1,36 +1,66 @@
 import { FC, useMemo } from 'react';
-import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
+import { useDispatch, useSelector } from '../../services/store';
+import { Navigate, useNavigate } from 'react-router-dom';
+import {
+  fetchOrderBurger,
+  resetOrderModal
+} from '../../services/slices/constructor-slice';
 
 export const BurgerConstructor: FC = () => {
   /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.user);
+  const bun = useSelector(
+    (state) => state.burgerConstructor.constructorItems.bun
+  );
+  const ingredients = useSelector(
+    (state) => state.burgerConstructor.constructorItems.ingredients
+  );
+
+  const orderData = ingredients
+    .map((i) => i._id)
+    .concat([bun?._id || ''], [bun?._id || ''])
+    .filter((i) => i !== '');
+
   const constructorItems = {
-    bun: {
-      price: 0
-    },
-    ingredients: []
+    bun: bun,
+    ingredients: ingredients
   };
 
-  const orderRequest = false;
+  const orderRequest = useSelector(
+    (state) => state.burgerConstructor.orderRequest
+  );
 
-  const orderModalData = null;
+  const orderModalData = useSelector(
+    (state) => state.burgerConstructor.orderModalData
+  );
 
   const onOrderClick = () => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
     if (!constructorItems.bun || orderRequest) return;
+
+    dispatch(fetchOrderBurger(orderData));
   };
-  const closeOrderModal = () => {};
+
+  const closeOrderModal = () => {
+    dispatch(resetOrderModal());
+    navigate('/');
+  };
+
+  let ingredientPrice = 0;
+  constructorItems.ingredients.forEach((i) => (ingredientPrice += i.price));
 
   const price = useMemo(
     () =>
       (constructorItems.bun ? constructorItems.bun.price * 2 : 0) +
-      constructorItems.ingredients.reduce(
-        (s: number, v: TConstructorIngredient) => s + v.price,
-        0
-      ),
+      ingredientPrice,
     [constructorItems]
   );
-
-  return null;
 
   return (
     <BurgerConstructorUI
