@@ -10,11 +10,7 @@ import {
 import { Link, NavLink } from 'react-router-dom';
 import clsx from 'clsx';
 
-export const AppHeaderUI: FC<TAppHeaderUIProps> = ({
-  userName,
-  isConstructorActive,
-  isOrderListActive
-}) => (
+export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => (
   <header className={styles.header}>
     <nav className={`${styles.menu} p-4`}>
       <div className={styles.menu_part_left}>

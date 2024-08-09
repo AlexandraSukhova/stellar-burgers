@@ -1,23 +1,24 @@
 import { FC, useMemo } from 'react';
 import { BurgerConstructorUI } from '@ui';
 import { useDispatch, useSelector } from '../../services/store';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
-  fetchOrderBurger,
+  getConstructorItems,
+  getModalData,
+  getOrderRequest,
   resetOrderModal
 } from '../../services/slices/constructor-slice';
+import { getUser } from '../../services/slices/user-slice';
+import { fetchOrderBurger } from '../../services/slices/assync-thunk/burger-constructor';
 
 export const BurgerConstructor: FC = () => {
   /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.user);
-  const bun = useSelector(
-    (state) => state.burgerConstructor.constructorItems.bun
-  );
-  const ingredients = useSelector(
-    (state) => state.burgerConstructor.constructorItems.ingredients
-  );
+  const constructorIngredient = useSelector(getConstructorItems);
+  const user = useSelector(getUser);
+  const bun = constructorIngredient.bun;
+  const ingredients = constructorIngredient.ingredients;
 
   const orderData = ingredients
     .map((i) => i._id)
@@ -29,13 +30,9 @@ export const BurgerConstructor: FC = () => {
     ingredients: ingredients
   };
 
-  const orderRequest = useSelector(
-    (state) => state.burgerConstructor.orderRequest
-  );
+  const orderRequest = useSelector(getOrderRequest);
 
-  const orderModalData = useSelector(
-    (state) => state.burgerConstructor.orderModalData
-  );
+  const orderModalData = useSelector(getModalData);
 
   const onOrderClick = () => {
     if (!user) {

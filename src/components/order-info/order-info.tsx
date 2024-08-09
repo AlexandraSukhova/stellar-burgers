@@ -4,17 +4,30 @@ import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient, TOrder } from '@utils-types';
 import { useSelector } from '../../services/store';
 import { useParams } from 'react-router-dom';
+import { getAllOrders } from '../../services/slices/feed-slice';
+import { getIngredients } from '../../services/slices/ingredient-slice';
+import { getAuthenticated } from '../../services/slices/user-slice';
+import { getUserOrders } from '../../services/slices/user-order-slice';
 
 export const OrderInfo: FC = () => {
   /** TODO: взять переменные orderData и ingredients из стора */
   const params = useParams();
-  const ingredients: TIngredient[] = useSelector(
-    (state) => state.ingredients.ingredients
-  );
+  const ingredients: TIngredient[] = useSelector(getIngredients);
+  const isAuth = useSelector(getAuthenticated);
+  const orders = useSelector(getAllOrders);
+  const userOrders = useSelector(getUserOrders);
+  let allOrders: TOrder[];
 
-  const orderData: TOrder | undefined = useSelector(
-    (state) => state.feed.orders
-  ).find((i) => i.number === Number(params.number));
+  !isAuth
+    ? (allOrders = orders)
+    : (allOrders =
+        orders.concat(
+          userOrders
+        )); /** для отображения модальных с деталями всех заказов в профиле */
+
+  const orderData: TOrder | undefined = allOrders.find(
+    (i) => i.number === Number(params.number)
+  );
 
   /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {

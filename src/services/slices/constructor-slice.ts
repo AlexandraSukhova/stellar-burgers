@@ -1,14 +1,12 @@
-import { orderBurgerApi } from '@api';
 import {
   PayloadAction,
   SerializedError,
-  createAsyncThunk,
   createSlice,
   nanoid
 } from '@reduxjs/toolkit';
 import { TConstructorIngredient, TIngredient, TOrder } from '@utils-types';
-
-export const fetchOrderBurger = createAsyncThunk('order/post', orderBurgerApi);
+import { CONSTRUCTOR_SLICE_NAME } from '../../utils/constants';
+import { fetchOrderBurger } from './assync-thunk/burger-constructor';
 
 interface BurgerState {
   constructorItems: {
@@ -31,7 +29,7 @@ export const initialState: BurgerState = {
 };
 
 export const constructorSlice = createSlice({
-  name: 'constructor',
+  name: CONSTRUCTOR_SLICE_NAME,
   initialState,
   reducers: {
     addIngredient: {
@@ -94,6 +92,12 @@ export const constructorSlice = createSlice({
         state.orderRequest = false;
         state.orderModalData = action.payload.order;
       });
+  },
+  selectors: {
+    getConstructorItems: (state) => state.constructorItems,
+    getError: (state) => state.error,
+    getOrderRequest: (state) => state.orderRequest,
+    getModalData: (state) => state.orderModalData
   }
 });
 
@@ -104,4 +108,7 @@ export const {
   moveDownIngredient,
   resetOrderModal
 } = constructorSlice.actions;
-export default constructorSlice.reducer;
+
+export const { getConstructorItems, getError, getOrderRequest, getModalData } =
+  constructorSlice.selectors;
+export default constructorSlice;

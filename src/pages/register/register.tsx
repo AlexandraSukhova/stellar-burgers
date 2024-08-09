@@ -3,9 +3,8 @@ import { RegisterUI } from '@ui-pages';
 import { useDispatch } from '../../services/store';
 import {
   fetchUserLogin,
-  fetchUserRegister,
-  savePassword
-} from '../../services/slices/user-slice';
+  fetchUserRegister
+} from '../../services/slices/assync-thunk/user';
 
 export const Register: FC = () => {
   const [userName, setUserName] = useState('');

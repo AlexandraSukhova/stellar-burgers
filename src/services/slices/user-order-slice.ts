@@ -1,12 +1,7 @@
-import { getOrderByNumberApi, getOrdersApi } from '@api';
-import {
-  SerializedError,
-  createAsyncThunk,
-  createSlice
-} from '@reduxjs/toolkit';
+import { SerializedError, createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
-
-export const fetchUserOrders = createAsyncThunk('user/orders', getOrdersApi);
+import { USER_ORDER_SLICE_NAME } from '../../utils/constants';
+import { fetchUserOrders } from './assync-thunk/user-oreders';
 
 export interface IUserOrder {
   orders: TOrder[];
@@ -21,7 +16,7 @@ export const initialState: IUserOrder = {
 };
 
 const userOrdersSlice = createSlice({
-  name: 'user/orders',
+  name: USER_ORDER_SLICE_NAME,
   initialState,
   reducers: {},
   extraReducers(builder) {
@@ -38,7 +33,14 @@ const userOrdersSlice = createSlice({
         state.loading = false;
         state.orders = action.payload;
       });
+  },
+  selectors: {
+    getUserOrders: (state) => state.orders,
+    isUserOrdersLoading: (state) => state.loading,
+    getUserOrdersError: (state) => state.error
   }
 });
 
-export default userOrdersSlice.reducer;
+export const { getUserOrders, getUserOrdersError, isUserOrdersLoading } =
+  userOrdersSlice.selectors;
+export default userOrdersSlice;

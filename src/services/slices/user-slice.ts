@@ -1,64 +1,17 @@
-import {
-  TRegisterData,
-  forgotPasswordApi,
-  getUserApi,
-  loginUserApi,
-  logoutApi,
-  registerUserApi,
-  resetPasswordApi,
-  updateUserApi
-} from '@api';
-import {
-  PayloadAction,
-  SerializedError,
-  createAsyncThunk,
-  createSlice
-} from '@reduxjs/toolkit';
+import { SerializedError, createSlice } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
-import { deleteCookie, getCookie, setCookie } from '../../utils/cookie';
 
-export const fetchUserRegister = createAsyncThunk(
-  'user/registr',
-  registerUserApi
-);
-
-export const fetchUserLogin = createAsyncThunk(
-  'user/login',
-  async ({ email, password }: Omit<TRegisterData, 'name'>) => {
-    const data = await loginUserApi({ email, password });
-    setCookie('accessToken', data.accessToken);
-    localStorage.setItem('refreshToken', data.refreshToken);
-    return data.user;
-  }
-);
-
-export const checkUserAuth = createAsyncThunk(
-  'user/checkUser',
-  (_, { dispatch }) => {
-    if (getCookie('accessToken')) {
-      dispatch(fetchGetApi()).finally(() => {
-        dispatch(authChecked());
-      });
-    } else {
-      dispatch(authChecked());
-    }
-  }
-);
-
-export const fetchUserLogout = createAsyncThunk('user/logout', () => {
-  logoutApi().then(() => {
-    localStorage.clear();
-    deleteCookie('accessToken');
-  });
-});
-
-export const fetchGetApi = createAsyncThunk('user/getApi', getUserApi);
-
-export const fetchUpdateApi = createAsyncThunk('user/updateApi', updateUserApi);
+import { USER_SLICE_NAME } from '../../utils/constants';
+import {
+  fetchGetApi,
+  fetchUpdateApi,
+  fetchUserLogin,
+  fetchUserLogout,
+  fetchUserRegister
+} from './assync-thunk/user';
 
 export interface IUserSlice {
   user: TUser | null;
-  password: string;
   isAuthChecked: boolean; //была ли проверка на авторизацию
   isAuthenticated: boolean; //пользователь прошел/не прошел авторизацию
   init: boolean; //старт проверки
@@ -67,7 +20,6 @@ export interface IUserSlice {
 
 export const initialState: IUserSlice = {
   user: null,
-  password: '',
   isAuthChecked: false,
   isAuthenticated: false,
   init: false,
@@ -75,14 +27,11 @@ export const initialState: IUserSlice = {
 };
 
 const userSlice = createSlice({
-  name: 'user',
+  name: USER_SLICE_NAME,
   initialState,
   reducers: {
     authChecked: (state) => {
       state.isAuthChecked = true;
-    },
-    savePassword: (state, action: PayloadAction<string>) => {
-      state.password = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -147,8 +96,17 @@ const userSlice = createSlice({
         state.isAuthenticated = false;
         state.user = null;
       });
+  },
+  selectors: {
+    getUser: (state) => state.user,
+    getAuthChecked: (state) => state.isAuthChecked,
+    getAuthenticated: (state) => state.isAuthenticated,
+    getError: (state) => state.error,
+    isInit: (state) => state.init
   }
 });
 
-export const { authChecked, savePassword } = userSlice.actions;
-export default userSlice.reducer;
+export const { getUser, getAuthChecked, getAuthenticated, getError, isInit } =
+  userSlice.selectors;
+export const { authChecked } = userSlice.actions;
+export default userSlice;

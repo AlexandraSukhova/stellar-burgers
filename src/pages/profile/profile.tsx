@@ -1,18 +1,18 @@
 import { ProfileUI } from '@ui-pages';
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
-import { fetchUpdateApi } from '../../services/slices/user-slice';
+import { getUser } from '../../services/slices/user-slice';
+import { fetchUpdateApi } from '../../services/slices/assync-thunk/user';
 
 export const Profile: FC = () => {
   /** TODO: взять переменную из стора */
-  const user = useSelector((state) => state.user.user);
-  const password = useSelector((state) => state.user.password);
+  const user = useSelector(getUser);
   const dispatch = useDispatch();
 
   const [formValue, setFormValue] = useState({
     name: user?.name || '',
     email: user?.email || '',
-    password: password
+    password: ''
   });
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export const Profile: FC = () => {
     setFormValue({
       name: user?.name || '',
       email: user?.email || '',
-      password: password
+      password: ''
     });
   };
 

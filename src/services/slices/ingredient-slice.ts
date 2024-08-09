@@ -1,12 +1,7 @@
 import { PayloadAction, SerializedError, createSlice } from '@reduxjs/toolkit';
 import { TIngredient } from '@utils-types';
-import { getIngredientsApi } from '@api';
-import { createAsyncThunk } from '@reduxjs/toolkit';
-
-export const fetchIngredients = createAsyncThunk(
-  'ingredients/fetchIngredients',
-  getIngredientsApi
-);
+import { INGREDIENT_SLICE_NAME } from '../../utils/constants';
+import { fetchIngredients } from './assync-thunk/ingredients';
 
 interface IngredientsState {
   ingredients: TIngredient[];
@@ -21,7 +16,7 @@ export const initialState: IngredientsState = {
 };
 
 export const ingredientsSlice = createSlice({
-  name: 'ingredients',
+  name: INGREDIENT_SLICE_NAME,
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -40,7 +35,14 @@ export const ingredientsSlice = createSlice({
         state.loading = false;
         state.error = action.error;
       });
+  },
+  selectors: {
+    getIngredients: (state) => state.ingredients,
+    isIngredientsLoading: (state) => state.loading,
+    getIngredientError: (state) => state.error
   }
 });
 
-export default ingredientsSlice.reducer;
+export const { getIngredients, isIngredientsLoading, getIngredientError } =
+  ingredientsSlice.selectors;
+export default ingredientsSlice;

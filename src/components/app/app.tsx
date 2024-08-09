@@ -12,13 +12,13 @@ import {
 } from '@pages';
 import { useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
-import { fetchIngredients } from '../../services/slices/ingredient-slice';
-import { checkUserAuth } from '../../services/slices/user-slice';
+import { fetchIngredients } from '../../services/slices/assync-thunk/ingredients';
 import '../../index.css';
 import { useDispatch } from '../../services/store';
 import { ProtectedRoute } from '../protected-route';
 import styles from './app.module.css';
-import { fetchFeed } from '../../services/slices/feed-slice';
+import { fetchFeed } from '../../services/slices/assync-thunk/feed';
+import { checkUserAuth } from '../../services/slices/assync-thunk/user';
 
 const App = () => {
   const location = useLocation();
