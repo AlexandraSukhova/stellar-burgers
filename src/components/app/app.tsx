@@ -17,7 +17,6 @@ import '../../index.css';
 import { useDispatch } from '../../services/store';
 import { ProtectedRoute } from '../protected-route';
 import styles from './app.module.css';
-import { fetchFeed } from '../../services/slices/assync-thunk/feed';
 import { checkUserAuth } from '../../services/slices/assync-thunk/user';
 
 const App = () => {
@@ -33,7 +32,6 @@ const App = () => {
   useEffect(() => {
     dispatch(checkUserAuth());
     dispatch(fetchIngredients());
-    dispatch(fetchFeed());
   }, []);
 
   return (

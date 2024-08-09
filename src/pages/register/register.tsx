@@ -1,15 +1,17 @@
 import { FC, SyntheticEvent, useState } from 'react';
 import { RegisterUI } from '@ui-pages';
-import { useDispatch } from '../../services/store';
+import { useDispatch, useSelector } from '../../services/store';
 import {
   fetchUserLogin,
   fetchUserRegister
 } from '../../services/slices/assync-thunk/user';
+import { getError } from '../../services/slices/user-slice';
 
 export const Register: FC = () => {
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const error = useSelector(getError);
 
   const dispatch = useDispatch();
 
@@ -24,7 +26,7 @@ export const Register: FC = () => {
 
   return (
     <RegisterUI
-      errorText=''
+      errorText={error?.message}
       email={email}
       userName={userName}
       password={password}
