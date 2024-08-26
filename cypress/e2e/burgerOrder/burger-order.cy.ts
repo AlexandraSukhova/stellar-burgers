@@ -1,3 +1,5 @@
+import { bunIngredients, constructorBunBottom, constructorBunTop, ingredientAddButtonText, ingredientsList, mainIngredients, modal, modalCloseButton, modalOverlay, orderPostButton, sauseIngredients } from "cypress/constants";
+
 describe('order post correctly', function() {
   beforeEach(() => {
   cy.intercept('GET', 'api/ingredients', {fixture: 'ingredients.json'});
@@ -12,7 +14,13 @@ describe('order post correctly', function() {
   cy.setCookie('accessToken', 'test-accessToken');
 
   cy.viewport(1440, 800);
-  cy.visit('http://localhost:4000');
+  cy.visit('');
+
+  cy.get(bunIngredients).contains(ingredientAddButtonText).click();
+  cy.get(mainIngredients).contains(ingredientAddButtonText).click();
+  cy.get(sauseIngredients).contains(ingredientAddButtonText).click();
+
+  cy.get(orderPostButton).click();
 })
 
   afterEach(() => {
@@ -21,12 +29,6 @@ describe('order post correctly', function() {
 })
 
   it('order post with correct data', () => {
-    cy.get('[data-cy=ingredients-bun]').contains('Добавить').click();
-    cy.get('[data-cy=ingredients-main]').contains('Добавить').click();
-    cy.get('[data-cy=ingredients-sause]').contains('Добавить').click();
-
-    cy.get('[data-cy=burger-total] button').click();
-
     cy.wait('@postOrder')
     .its('request.body')
     .should('deep.equal', {
@@ -35,38 +37,26 @@ describe('order post correctly', function() {
   })
 
   it('order modal worcks correctly', () => {
-    cy.get('[data-cy=ingredients-bun]').contains('Добавить').click();
-    cy.get('[data-cy=ingredients-main]').contains('Добавить').click();
-
-    cy.get('[data-cy=burger-total] button').click();
-    
-    const modal = cy.get('[data-cy=modal]');
-
-    modal
+    cy.get(modal)
     .contains('1234')
     .should('exist'); // Проверяем, что модальное окно отображает корректные данные
 
-    cy.get('[data-cy=modal-button-close]').click(); // Находим кнопу для закрытия модального окна
-    modal // Проверяем, что модальное окно было закрыто и больше не отображается на странице
+    cy.get(modalCloseButton).click(); // Находим кнопу для закрытия модального окна
+    cy.get(modal) // Проверяем, что модальное окно было закрыто и больше не отображается на странице
     .should('not.exist')
   })
 
   it('burger constructor should be clean after order success', () => {
-    cy.get('[data-cy=ingredients-bun] button').contains('Добавить').click();
-    cy.get('[data-cy=ingredients-main]').contains('Добавить').click();
+    cy.get(modalOverlay).click({force: true});
 
-    cy.get('[data-cy=burger-total] button').click();
-
-    cy.get('[data-cy=modal-overlay]').click({force: true});
-
-    cy.get('[data-cy=constructor-ingredients]')
+    cy.get(ingredientsList)
     .find('li')
     .should('not.exist'); // Проверяем, что список ингридиентов очищен
 
-    cy.get('[data-cy=constructor-bun-top]')
+    cy.get(constructorBunTop)
     .should('not.exist'); // Проверям, что верхняя секция под булку очищена
 
-    cy.get('[data-cy=constructor-bun-bottom]')
+    cy.get(constructorBunBottom)
     .should('not.exist') // Проверяем, что нижняя секция под булку очищена
   })
 })
