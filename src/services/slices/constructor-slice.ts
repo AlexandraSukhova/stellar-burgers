@@ -80,6 +80,7 @@ export const constructorSlice = createSlice({
     builder
       .addCase(fetchOrderBurger.pending, (state) => {
         state.orderRequest = true;
+        state.error = null;
       })
       .addCase(fetchOrderBurger.rejected, (state, action) => {
         state.error = action.error;
@@ -95,7 +96,7 @@ export const constructorSlice = createSlice({
   },
   selectors: {
     getConstructorItems: (state) => state.constructorItems,
-    getError: (state) => state.error,
+    getOrderError: (state) => state.error,
     getOrderRequest: (state) => state.orderRequest,
     getModalData: (state) => state.orderModalData
   }
@@ -109,6 +110,10 @@ export const {
   resetOrderModal
 } = constructorSlice.actions;
 
-export const { getConstructorItems, getError, getOrderRequest, getModalData } =
-  constructorSlice.selectors;
+export const {
+  getConstructorItems,
+  getOrderError,
+  getOrderRequest,
+  getModalData
+} = constructorSlice.selectors;
 export default constructorSlice;

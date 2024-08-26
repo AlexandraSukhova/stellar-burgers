@@ -33,7 +33,7 @@ export const BurgerConstructor: FC = () => {
   const orderRequest = useSelector(getOrderRequest);
 
   const orderModalData = useSelector(getModalData);
-  console.log(orderModalData);
+
   const onOrderClick = () => {
     if (!user) {
       navigate('/login');

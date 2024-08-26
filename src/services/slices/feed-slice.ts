@@ -29,10 +29,12 @@ const feedSlice = createSlice({
           state.feed = action.payload;
           state.orders = action.payload.orders;
           state.loading = false;
+          state.error = null;
         }
       )
       .addCase(fetchFeed.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(fetchFeed.rejected, (state, action) => {
         state.loading = false;
@@ -42,11 +44,11 @@ const feedSlice = createSlice({
   selectors: {
     getFeed: (state) => state.feed,
     getAllOrders: (state) => state.orders,
-    isLoading: (state) => state.loading,
+    isFeedLoading: (state) => state.loading,
     getFeedError: (state) => state.error
   }
 });
 
-export const { getFeed, getAllOrders, isLoading, getFeedError } =
+export const { getFeed, getAllOrders, isFeedLoading, getFeedError } =
   feedSlice.selectors;
 export default feedSlice;

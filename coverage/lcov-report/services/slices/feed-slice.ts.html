@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">86.53% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>45/52</span>
+                <span class='fraction'>54/54</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">20% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/5</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">86.53% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>45/52</span>
+                <span class='fraction'>54/54</span>
             </div>
         
             
@@ -115,7 +115,9 @@
 <a name='L50'></a><a href='#L50'>50</a>
 <a name='L51'></a><a href='#L51'>51</a>
 <a name='L52'></a><a href='#L52'>52</a>
-<a name='L53'></a><a href='#L53'>53</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -143,17 +145,19 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -195,28 +199,30 @@ const feedSlice = createSlice({
       .addCase(
         fetchFeed.fulfilled,
         (state, action: PayloadAction&lt;TOrdersData&gt;) =&gt; {
-<span class="cstat-no" title="statement not covered" >          state.feed = action.payload;</span>
-<span class="cstat-no" title="statement not covered" >          state.orders = action.payload.orders;</span>
-<span class="cstat-no" title="statement not covered" >          state.loading = false;</span>
-<span class="cstat-no" title="statement not covered" >        }</span>
+          state.feed = action.payload;
+          state.orders = action.payload.orders;
+          state.loading = false;
+          state.error = null;
+        }
       )
       .addCase(fetchFeed.pending, (state) =&gt; {
-<span class="cstat-no" title="statement not covered" >        state.loading = true;</span>
+        state.loading = true;
+        state.error = null;
       })
       .addCase(fetchFeed.rejected, (state, action) =&gt; {
-<span class="cstat-no" title="statement not covered" >        state.loading = false;</span>
-<span class="cstat-no" title="statement not covered" >        state.error = action.error;</span>
+        state.loading = false;
+        state.error = action.error;
       });
   },
   selectors: {
-    getFeed: <span class="fstat-no" title="function not covered" >(state) =&gt; state.feed,</span>
-    getAllOrders: <span class="fstat-no" title="function not covered" >(state) =&gt; state.orders,</span>
-    isLoading: <span class="fstat-no" title="function not covered" >(state) =&gt; state.loading,</span>
-    getFeedError: <span class="fstat-no" title="function not covered" >(state) =&gt; state.error</span>
+    getFeed: (state) =&gt; state.feed,
+    getAllOrders: (state) =&gt; state.orders,
+    isFeedLoading: (state) =&gt; state.loading,
+    getFeedError: (state) =&gt; state.error
   }
 });
 &nbsp;
-export const { getFeed, getAllOrders, isLoading, getFeedError } =
+export const { getFeed, getAllOrders, isFeedLoading, getFeedError } =
   feedSlice.selectors;
 export default feedSlice;
 &nbsp;</pre></td></tr></table></pre>
@@ -226,7 +232,7 @@ export default feedSlice;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-22T14:11:44.446Z
+                at 2024-08-26T08:12:00.963Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

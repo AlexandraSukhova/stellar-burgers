@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">37.02% </span>
+                <span class="strong">37.28% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>87/235</span>
+                <span class='fraction'>88/236</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">37.02% </span>
+                <span class="strong">37.28% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>87/235</span>
+                <span class='fraction'>88/236</span>
             </div>
         
             
@@ -305,6 +305,7 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -534,11 +535,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { setCookie, getCookie } from './cookie';
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >import { TIngredient, TOrder, TOrdersData, TUser } from './types';</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>
 &nbsp;
-const URL = process.env.BURGER_API_URL<span class="branch-0 cbranch-no" title="branch not covered" > ?? '</span>https://norma.nomoreparties.space/api';
+const URL =
+  process.env.BURGER_API_URL<span class="branch-0 cbranch-no" title="branch not covered" > ?? '</span>https://norma.nomoreparties.space/api';
 &nbsp;
 const checkResponse = <span class="fstat-no" title="function not covered" >&lt;T&gt;(res: Response): Promise&lt;T&gt; =&gt;</span>
 <span class="cstat-no" title="statement not covered" >  res.ok ? res.json() : res.json().then((err) =&gt; Promise.reject(err));</span>
@@ -770,7 +771,6 @@ export const logoutApi = <span class="fstat-no" title="function not covered" >()
 <span class="cstat-no" title="statement not covered" >      token: localStorage.getItem('refreshToken')</span>
 <span class="cstat-no" title="statement not covered" >    })</span>
 <span class="cstat-no" title="statement not covered" >  }).then((res) =&gt; checkResponse&lt;TServerResponse&lt;{}&gt;&gt;(res));</span>
-&nbsp;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -778,7 +778,7 @@ export const logoutApi = <span class="fstat-no" title="function not covered" >()
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-22T14:11:44.446Z
+                at 2024-08-26T08:12:00.963Z
             </div>
         <script src="../prettify.js"></script>
         <script>

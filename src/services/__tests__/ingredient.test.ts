@@ -1,58 +1,55 @@
-import {expect, describe, jest} from '@jest/globals';
+import { expect, describe, jest } from '@jest/globals';
 import { ingredientsMock } from '../mocks/mock-data';
 import { fetchIngredients } from '../slices/assync-thunk/ingredients';
-import { getIngredientError, getIngredients, isIngredientsLoading } from '../slices/ingredient-slice';
+import {
+  getIngredientError,
+  getIngredients,
+  isIngredientsLoading
+} from '../slices/ingredient-slice';
 import store from '../store';
-import { getIngredientsApi } from '@api';
 
-jest.mock('@api', () => ({
-  getIngredientsApi: jest.fn()
-}));
+afterEach(() => {
+  jest.restoreAllMocks();
+});
 
 describe('tests for ingredient slice', () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
+  const loading = () => isIngredientsLoading(store.getState());
+  const error = () => getIngredientError(store.getState());
+  const ingredients = () => getIngredients(store.getState());
+
+  it('assyncThunk FAILED test', async () => {
+    const failed = {
+      type: fetchIngredients.rejected.type,
+      error: '404 not found'
+    };
+
+    await store.dispatch(failed);
+
+    expect(ingredients()).toEqual([]);
+    expect(loading()).toBe(false);
+    expect(error()).toBe('404 not found');
   });
 
-  it('assyncThunk ERROR test', async() => {
-    (getIngredientsApi as jest.Mock).mockRejectedValue('404 not found' as never);
+  it('assyncThunk REQUEST test', async () => {
+    const request = { type: fetchIngredients.pending.type };
 
-    await store.dispatch(fetchIngredients());
-    const loading = isIngredientsLoading(store.getState());
-    const error = getIngredientError(store.getState());
-    const ingredients = getIngredients(store.getState());
+    store.dispatch(request);
 
-    expect(getIngredientsApi).toBeCalledTimes(1);
-    expect(ingredients).toEqual([]);
-    expect(loading).toBe(false);
-    expect(error?.message).toBe('404 not found');
-  })
+    expect(ingredients()).toEqual([]);
+    expect(loading()).toBe(true);
+    expect(error()).toBe(null);
+  });
 
-  it('assyncThunk LOADING test', async() => {
-    (getIngredientsApi as jest.Mock).mockReturnValue(new Promise(() => {}));
+  it('assyncThunk SUCCESS test', async () => {
+    const success = {
+      type: fetchIngredients.fulfilled.type,
+      payload: ingredientsMock
+    };
 
-    store.dispatch(fetchIngredients());
-    const loading = isIngredientsLoading(store.getState());
-    const error = getIngredientError(store.getState());
-    const ingredients = getIngredients(store.getState());
+    await store.dispatch(success);
 
-    expect(getIngredientsApi).toBeCalledTimes(2);
-    expect(ingredients).toEqual([]);
-    expect(loading).toBe(true);
-    expect(error).toBe(null);
-  })
-
-  it('assyncThunk SUCCESS test', async() => {
-    (getIngredientsApi as jest.Mock).mockResolvedValue(ingredientsMock as never);
-
-    await store.dispatch(fetchIngredients());
-    const loading = isIngredientsLoading(store.getState());
-    const error = getIngredientError(store.getState());
-    const ingredients = getIngredients(store.getState());
-
-    expect(getIngredientsApi).toBeCalledTimes(3);
-    expect(ingredients).toEqual(ingredientsMock);
-    expect(loading).toBe(false);
-    expect(error).toBe(null);
-  })
-})
+    expect(ingredients()).toEqual(ingredientsMock);
+    expect(loading()).toBe(false);
+    expect(error()).toBe(null);
+  });
+});
