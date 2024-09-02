@@ -5,13 +5,13 @@ import {
   fetchUserLogin,
   fetchUserRegister
 } from '../../services/slices/assync-thunk/user';
-import { getError } from '../../services/slices/user-slice';
+import { getUserError } from '../../services/slices/user-slice';
 
 export const Register: FC = () => {
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const error = useSelector(getError);
+  const error = useSelector(getUserError);
 
   const dispatch = useDispatch();
 

@@ -26,10 +26,12 @@ export const ingredientsSlice = createSlice({
         (state, action: PayloadAction<TIngredient[]>) => {
           state.ingredients = action.payload;
           state.loading = false;
+          state.error = null;
         }
       )
       .addCase(fetchIngredients.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(fetchIngredients.rejected, (state, action) => {
         state.loading = false;

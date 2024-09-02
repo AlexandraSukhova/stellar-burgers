@@ -23,10 +23,13 @@ const userOrdersSlice = createSlice({
     builder
       .addCase(fetchUserOrders.pending, (state) => {
         state.loading = true;
+        state.error = null;
+        state.orders = [];
       })
       .addCase(fetchUserOrders.rejected, (state, action) => {
         state.error = action.error;
         state.loading = false;
+        state.orders = [];
       })
       .addCase(fetchUserOrders.fulfilled, (state, action) => {
         state.error = null;

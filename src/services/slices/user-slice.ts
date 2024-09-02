@@ -39,74 +39,112 @@ const userSlice = createSlice({
       .addCase(fetchUserRegister.fulfilled, (state, action) => {
         state.init = false;
         state.user = action.payload.user;
+        state.error = null;
+        state.isAuthenticated = true;
+        state.isAuthChecked = true;
       })
       .addCase(fetchUserRegister.pending, (state) => {
         state.init = true;
+        state.error = null;
+        state.isAuthenticated = false;
+        state.isAuthChecked = false;
       })
       .addCase(fetchUserRegister.rejected, (state, action) => {
         state.init = false;
         state.error = action.error;
+        state.isAuthenticated = false;
+        state.isAuthChecked = true;
+        state.user = null;
       })
       .addCase(fetchUserLogin.pending, (state) => {
         state.init = true;
         state.error = null;
+        state.isAuthChecked = false;
+        state.isAuthenticated = false;
+        state.user = null;
       })
       .addCase(fetchUserLogin.rejected, (state, action) => {
         state.init = false;
         state.error = action.error;
         state.isAuthChecked = true;
+        state.isAuthenticated = false;
+        state.user = null;
       })
       .addCase(fetchUserLogin.fulfilled, (state, action) => {
         state.user = action.payload;
         state.init = false;
         state.isAuthenticated = true;
         state.isAuthChecked = true;
+        state.error = null;
       })
       .addCase(fetchGetApi.pending, (state) => {
         state.init = true;
+        state.isAuthenticated = false;
+        state.isAuthChecked = false;
+        state.user = null;
+        state.error = null;
       })
-      .addCase(fetchGetApi.rejected, (state) => {
+      .addCase(fetchGetApi.rejected, (state, action) => {
+        state.isAuthChecked = true;
         state.isAuthenticated = false;
         state.init = false;
+        state.user = null;
+        state.error = action.error;
       })
       .addCase(fetchGetApi.fulfilled, (state, action) => {
+        state.isAuthChecked = true;
         state.isAuthenticated = true;
         state.user = action.payload.user;
+        state.init = false;
+        state.error = null;
       })
       .addCase(fetchUpdateApi.pending, (state) => {
         state.init = true;
+        state.error = null;
       })
-      .addCase(fetchUpdateApi.rejected, (state) => {
-        state.isAuthenticated = false;
+      .addCase(fetchUpdateApi.rejected, (state, action) => {
         state.init = false;
+        state.error = action.error;
+        state.isAuthenticated = true;
       })
       .addCase(fetchUpdateApi.fulfilled, (state, action) => {
-        state.isAuthenticated = true;
+        state.init = false;
         state.user = action.payload.user;
       })
       .addCase(fetchUserLogout.pending, (state) => {
         state.init = true;
+        state.isAuthenticated = true;
+        state.error = null;
       })
       .addCase(fetchUserLogout.rejected, (state, action) => {
         state.init = false;
         state.error = action.error;
+        state.isAuthenticated = true;
+        state.isAuthChecked = true;
       })
       .addCase(fetchUserLogout.fulfilled, (state) => {
         state.isAuthChecked = true;
         state.isAuthenticated = false;
         state.user = null;
+        state.init = false;
+        state.error = null;
       });
   },
   selectors: {
     getUser: (state) => state.user,
     getAuthChecked: (state) => state.isAuthChecked,
     getAuthenticated: (state) => state.isAuthenticated,
-    getError: (state) => state.error,
+    getUserError: (state) => state.error,
     isInit: (state) => state.init
   }
 });
 
-export const { getUser, getAuthChecked, getAuthenticated, getError, isInit } =
-  userSlice.selectors;
+export const {
+  getUser,
+  getAuthChecked,
+  getAuthenticated,
+  getUserError,
+  isInit
+} = userSlice.selectors;
 export const { authChecked } = userSlice.actions;
 export default userSlice;

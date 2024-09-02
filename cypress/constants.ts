@@ -1,0 +1,16 @@
+export const bunIngredients: string = '[data-cy=ingredients-bun]';
+export const mainIngredients:string = '[data-cy=ingredients-main]';
+export const sauseIngredients: string = '[data-cy=ingredients-sause]';
+export const ingredientsList: string = '[data-cy=constructor-ingredients]';
+export const constructorBunTop: string = '[data-cy=constructor-bun-top]';
+export const constructorBunBottom: string = '[data-cy=constructor-bun-bottom]';
+export const totalPrice: string = '[data-cy=total-price]';
+export const ingredientDeleteButton: string = '.constructor-element__action';
+export const ingredientAddButtonText: string = 'Добавить';
+export const bun: string = 'Bun 1';
+export const main: string = 'Main 1';
+export const sause: string = 'Sause 1';
+export const modal: string = '[data-cy=modal]';
+export const modalCloseButton: string = '[data-cy=modal-button-close]';
+export const modalOverlay: string = '[data-cy=modal-overlay]';
+export const orderPostButton: string = '[data-cy=burger-total] button';
