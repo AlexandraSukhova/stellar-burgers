@@ -2,13 +2,13 @@ import { bun, bunIngredients, constructorBunBottom, constructorBunTop, ingredien
 
 describe('constructor functions worcks correctly', function() {
     beforeEach(() => {
-    cy.intercept('GET', 'api/ingredients', {fixture: 'ingredients.json'});
+    cy.intercept('GET', 'ingredients', {fixture: 'ingredients.json'});
     cy.viewport(1440, 800);
-    cy.visit('');
+    cy.visit('/');
   });
 
   it('buns in burger constructor should be added correctly', () => {
-    cy.get(bunIngredients).contains(ingredientAddButtonText).click();
+    cy.addIngredient(bunIngredients);
 
     cy.get(constructorBunTop)
     .contains(bun)
@@ -24,11 +24,11 @@ describe('constructor functions worcks correctly', function() {
   })
 
   it('ingredients in burger constructor should be added correctly', () => {
-    cy.get(mainIngredients).contains(ingredientAddButtonText).click();
+    cy.addIngredient(mainIngredients);
     
     cy.get(ingredientsList)
     .contains(main)
-    .should('exist'); // Проверяем что при нажатии на ингридиент, он добаился в список основных ингредиентов
+    .should('exist'); // Проверяем что при нажатии на ингридиент, он добавился в список основных ингредиентов
 
     cy.get(sauseIngredients).contains(ingredientAddButtonText).click();
     
@@ -48,8 +48,8 @@ describe('constructor functions worcks correctly', function() {
   })
 
   it('ingredients in constructor should be move up and move down correctly', () => {
-    cy.get(mainIngredients).contains(ingredientAddButtonText).click();
-    cy.get(sauseIngredients).contains(ingredientAddButtonText).click(); // Добавляем 2 ингредиента в конструктор
+    cy.addIngredient(mainIngredients);
+    cy.addIngredient(sauseIngredients); // Добавляем 2 ингредиента в конструктор
     cy.get(ingredientsList).find('li').first().as('firstIngredient');
     cy.get(ingredientsList).find('li').last().as('lastIngredient');
 
@@ -57,23 +57,17 @@ describe('constructor functions worcks correctly', function() {
     .contains(main)
     .should('exist'); // Проверяем, что первый ингредиент в конструкторе это Main 1
 
-    cy.get('@firstIngredient')
-    .find('button')
-    .last()
-    .click(); // Кликаем на первом ингредиенте по кнопке вниз
+    cy.moveIngrToBottom('@firstIngredient');// Кликаем на первом ингредиенте по кнопке вниз
 
     cy.get('@firstIngredient')
     .contains(sause)
     .should('exist'); // Проверяем что на первом месте теперь стоит нижний ингредиент
-    
+
     cy.get('@lastIngredient')
     .contains(main)
     .should('exist'); // Проверяем, что ингредиент не удалился из конструтора и опустился вниз
-    
-    cy.get('@lastIngredient')
-    .find('button')
-    .first()
-    .click(); // У нижнего ингредиента кликаем на кнопку вверх
+
+    cy.moveIngrToTop('@lastIngredient');// У нижнего ингредиента кликаем на кнопку вверх
     
     cy.get('@firstIngredient')
     .contains(main)
@@ -81,16 +75,13 @@ describe('constructor functions worcks correctly', function() {
   })
 
   it('ingredients in the constructor must be removed', () => {
-    cy.get(mainIngredients).contains(ingredientAddButtonText).click();
-    
+    cy.addIngredient(mainIngredients);
+
     cy.get(ingredientsList)
     .contains(main)
     .should('exist'); // Проверяем, что ингредиент добавился в конструктор
-    
-    cy.get(ingredientsList)
-    .find('span')
-    .find(ingredientDeleteButton)
-    .click(); // Кликаем по корзине
+
+    cy.deleteIngredient(ingredientsList); // Кликаем по корзине
 
     cy.get(ingredientsList)
     .contains(main)
@@ -98,23 +89,20 @@ describe('constructor functions worcks correctly', function() {
   })
 
   it('bun in the constructor is not removed', () => {
-    cy.get(bunIngredients).contains(ingredientAddButtonText).click();
+    cy.addIngredient(bunIngredients);
     cy.get(constructorBunTop).contains(bun).as('constructorBun');
     
     cy.get('@constructorBun')
     .should('exist'); // Проверяем что булка в конструктор добавилась
 
-    cy.get(constructorBunTop)
-    .find('span')
-    .find(ingredientDeleteButton)
-    .click() // Нахаим кнопку удаления и производим клик
+    cy.deleteIngredient(constructorBunTop); // Находим кнопку удаления и производим клик
 
     cy.get('@constructorBun')
     .should('exist'); // Проверяем, что булка не удалилась из конструктора
   })
 
   it('total price of the burger should be considered correct', () => {
-    cy.get(mainIngredients).contains(ingredientAddButtonText).click();
+    cy.addIngredient(mainIngredients);
 
     cy.get(ingredientsList)
     .contains('424')
@@ -124,7 +112,7 @@ describe('constructor functions worcks correctly', function() {
     .contains('424')
     .should('exist'); // Проверяем соответвие в отображении суммы заказа
 
-    cy.get(bunIngredients).contains(ingredientAddButtonText).click();
+    cy.addIngredient(bunIngredients);
     cy.get(constructorBunTop)
     .contains('1255')
     .should('exist'); // Добавлем в конструтор булки
@@ -133,14 +121,11 @@ describe('constructor functions worcks correctly', function() {
     .contains(`${424 + 1255*2}`)
     .should('exist'); // Проверяем что сумма изменилась корректно с учетом добавления двух булок
 
-    cy.get(ingredientsList)
-    .find('span')
-    .find(ingredientDeleteButton)
-    .click(); // Удаляем ингредиент из заказа 
+    cy.deleteIngredient(ingredientsList); // Удаляем ингредиент из заказа
 
     cy.get(totalPrice)
     .contains(`${424 + 1255*2 - 424}`)
-    .should('exist'); // Проверям, что сумма изменилась корректно 
+    .should('exist'); // Проверям, что сумма изменилась корректно
   })
 });
 
