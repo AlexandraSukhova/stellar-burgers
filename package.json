@@ -69,6 +69,7 @@
     "eslint-plugin-storybook": "^0.6.15",
     "eslint-webpack-plugin": "^4.0.1",
     "fetch-mock": "^9.11.0",
+    "gh-pages": "^6.1.1",
     "html-webpack-plugin": "^5.6.0",
     "jest": "^29.7.0",
     "jest-css-modules-transform": "^4.4.2",
@@ -96,7 +97,9 @@
     "lint:fix": "npm run lint -- --fix",
     "format": "prettier ./src --write",
     "jest": "jest",
-    "e2e": "cypress open"
+    "e2e": "cypress open",
+    "deploy": "gh-pages -d dist",
+    "build": "webpack --mode production"
   },
   "eslintConfig": {
     "extends": [

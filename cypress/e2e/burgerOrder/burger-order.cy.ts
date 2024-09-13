@@ -1,10 +1,10 @@
-import { bunIngredients, constructorBunBottom, constructorBunTop, ingredientAddButtonText, ingredientsList, mainIngredients, modal, modalCloseButton, modalOverlay, orderPostButton, sauseIngredients } from "cypress/constants";
+import { bunIngredients, constructorBunBottom, constructorBunTop, ingredientsList, mainIngredients, modal, modalCloseButton, modalOverlay, orderPostButton, sauseIngredients } from "cypress/constants";
 
 describe('order post correctly', function() {
   beforeEach(() => {
-  cy.intercept('GET', 'api/ingredients', {fixture: 'ingredients.json'});
+  cy.intercept('GET', 'ingredients', {fixture: 'ingredients.json'});
   cy.intercept('GET', 'api/auth/user', {fixture: 'user.json'});
-  cy.intercept('POST', 'api/orders', {fixture: 'post-order.json'}).as('postOrder');
+  cy.intercept('POST', 'orders', {fixture: 'post-order.json'}).as('postOrder');
 
   window.localStorage.setItem(
     'refreshToken',
@@ -14,11 +14,11 @@ describe('order post correctly', function() {
   cy.setCookie('accessToken', 'test-accessToken');
 
   cy.viewport(1440, 800);
-  cy.visit('');
+  cy.visit('/');
 
-  cy.get(bunIngredients).contains(ingredientAddButtonText).click();
-  cy.get(mainIngredients).contains(ingredientAddButtonText).click();
-  cy.get(sauseIngredients).contains(ingredientAddButtonText).click();
+  cy.addIngredient(bunIngredients);
+  cy.addIngredient(mainIngredients);
+  cy.addIngredient(sauseIngredients);
 
   cy.get(orderPostButton).click();
 })

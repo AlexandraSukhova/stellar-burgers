@@ -1,4 +1,7 @@
 /// <reference types="cypress" />
+
+import { ingredientAddButtonText, ingredientDeleteButton } from "cypress/constants";
+
 // ***********************************************
 // This example commands.ts shows you how to
 // create various custom commands and overwrite
@@ -35,3 +38,32 @@
 //     }
 //   }
 // }
+
+Cypress.Commands.add('addIngredient', (ingrContainer) => {
+  cy.get(ingrContainer).contains(ingredientAddButtonText).click();
+});
+
+Cypress.Commands.add('deleteIngredient', (ingr) => {
+  cy.get(ingr)
+  .find('span')
+  .find(ingredientDeleteButton)
+  .click();
+})
+
+Cypress.Commands.add('openIngredientModal', (container, ingr) => {
+  cy.get(container).contains(ingr).click();
+});
+
+Cypress.Commands.add('moveIngrToTop', (ingrContainer) => {
+  cy.get(ingrContainer)
+  .find('button')
+  .first()
+  .click();
+});
+
+Cypress.Commands.add('moveIngrToBottom', (ingr) => {
+  cy.get(ingr)
+  .find('button')
+  .last()
+  .click();
+});

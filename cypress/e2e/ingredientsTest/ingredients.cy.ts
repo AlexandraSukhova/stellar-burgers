@@ -1,12 +1,13 @@
-import { bun, bunIngredients, main, mainIngredients, modal, modalCloseButton, modalOverlay } from "cypress/constants";
+import { bun, bunIngredients, modal, modalCloseButton, modalOverlay } from "cypress/constants";
 
 describe('modal with ingredients works correctly', function() {
   this.beforeEach(() => {
-    cy.intercept('GET', 'api/ingredients', {fixture: 'ingredients.json'});
+    cy.intercept('GET', 'ingredients', {fixture: 'ingredients.json'});
     cy.viewport(1440, 800);
-    cy.visit('');
+    cy.visit('/');
 
-    cy.get(bunIngredients).contains(bun).click(); // Находим ингридиент и кликаем по нему
+    cy.openIngredientModal(bunIngredients, bun);
+    // Находим ингридиент и кликаем по нему
   });
 
   it('modal with bun should open and close by button', () => {
